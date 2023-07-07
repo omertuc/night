@@ -81,6 +81,47 @@ if sys.argv[1] == "audio_int":
     media.set_audio_output(
         next(output for output in audio_outputs if output.data == "tv_speaker")
     )
+if sys.argv[1] == "on":
+    power = SystemControl(client)
+    power.power_on()
+if sys.argv[1] == "off":
+    power = SystemControl(client)
+    power.power_off()
+if sys.argv[1] == "youtube":
+    control = ApplicationControl(client)
+    apps = control.list_apps()  
+    yt = next(app for app in apps if "youtube" in app["title"].lower())
+    launch_info = control.launch(yt)
+if sys.argv[1] == "play":
+    media = MediaControl(client)
+    media.play()
+if sys.argv[1] == "pause":
+    media = MediaControl(client)
+    media.pause()
+if sys.argv[1] == "up":
+    inp = InputControl(client)
+    inp.connect_input()
+    inp.up()
+if sys.argv[1] == "down":
+    inp = InputControl(client)
+    inp.connect_input()
+    inp.down()
+if sys.argv[1] == "left":
+    inp = InputControl(client)
+    inp.connect_input()
+    inp.left()
+if sys.argv[1] == "right":
+    inp = InputControl(client)
+    inp.connect_input()
+    inp.right()
+if sys.argv[1] == "ok":
+    inp = InputControl(client)
+    inp.connect_input()
+    inp.ok()
+if sys.argv[1] == "back":
+    inp = InputControl(client)
+    inp.connect_input()
+    inp.back()
 elif sys.argv[1] == "night":
     system = SystemControl(client)
     system.notify("Setting up night mode...", icon_ext="png")
