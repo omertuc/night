@@ -122,6 +122,10 @@ if sys.argv[1] == "back":
     inp = InputControl(client)
     inp.connect_input()
     inp.back()
+if sys.argv[1] == "menu":
+    inp = InputControl(client)
+    inp.connect_input()
+    inp.menu()
 elif sys.argv[1] == "night":
     system = SystemControl(client)
     system.notify("Setting up night mode...", icon_ext="png")
@@ -143,7 +147,7 @@ elif sys.argv[1] == "night":
     inp.down()
     sleep(0.5)
     inp.ok()
-    sleep(4)
+    sleep(7)
     inp.right()
     sleep(0.5)
     inp.down()
