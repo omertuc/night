@@ -65,6 +65,13 @@ print(store)  # {'client_key': 'ACCESS_TOKEN_FROM_TV'}
 
 persist_to_your_custom_storage(store)
 
+if sys.argv[1] == "pc_input":
+    source_control = SourceControl(client)
+    sources = source_control.list_sources()    # Returns a list of InputSource instances.
+    print([source.label for source in sources])
+    source = next(source for source in sources if "PS5" in source.label)
+    source_control.set_source(source) 
+
 if sys.argv[1] == "audio_ext":
     media = MediaControl(client)
     audio_outputs = (
@@ -91,6 +98,13 @@ if sys.argv[1] == "youtube":
     control = ApplicationControl(client)
     apps = control.list_apps()  
     yt = next(app for app in apps if "youtube" in app["title"].lower())
+    launch_info = control.launch(yt)
+if sys.argv[1] == "dropout":
+    control = ApplicationControl(client)
+    apps = control.list_apps()  
+    with open("/tmp/bla.txt", "w") as f:
+        f.write(str(apps))
+    yt = next(app for app in apps if "dropout" in app["title"].lower())
     launch_info = control.launch(yt)
 if sys.argv[1] == "play":
     media = MediaControl(client)
@@ -126,7 +140,11 @@ if sys.argv[1] == "menu":
     inp = InputControl(client)
     inp.connect_input()
     inp.menu()
-elif sys.argv[1] == "night":
+if sys.argv[1] == "home":
+    inp = InputControl(client)
+    inp.connect_input()
+    inp.home()
+if sys.argv[1] == "night":
     system = SystemControl(client)
     system.notify("Setting up night mode...", icon_ext="png")
 
