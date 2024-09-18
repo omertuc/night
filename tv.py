@@ -99,6 +99,11 @@ if sys.argv[1] == "youtube":
     apps = control.list_apps()  
     yt = next(app for app in apps if "youtube" in app["title"].lower())
     launch_info = control.launch(yt)
+if sys.argv[1] == "netflix":
+    control = ApplicationControl(client)
+    apps = control.list_apps()  
+    yt = next(app for app in apps if "netflix" in app["title"].lower())
+    launch_info = control.launch(yt)
 if sys.argv[1] == "dropout":
     control = ApplicationControl(client)
     apps = control.list_apps()  
