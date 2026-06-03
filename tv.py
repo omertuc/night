@@ -39,7 +39,7 @@ else:
 
 if "host" in store:
     host = store["host"]
-    client = WebOSClient(host)
+    client = WebOSClient(host, secure=True)
 else:
     # Scans the current network to discover TV. Avoid [0] in real code. If you already know the IP,
     # you could skip the slow scan and # instead simply say:
@@ -50,7 +50,11 @@ else:
         0
     ]  # Use discover(secure=True) for newer models.
 
-client.connect()
+try:
+    client.connect()
+except Exception as e:
+    os.system("notify-send 'LG TV Connection Error' 'Could not connect to LG TV at IP {} (Taken from {}): {}'".format(client.host, STORE_PATH, e))
+
 
 for status in client.register(store):
     if status == WebOSClient.PROMPTED:
@@ -77,9 +81,10 @@ if sys.argv[1] == "audio_ext":
     audio_outputs = (
         media.list_audio_output_sources()
     )  # Returns a list of AudioOutputSource instances.
-    media.set_audio_output(
-        next(output for output in audio_outputs if output.data == "external_speaker")
-    )
+    print(audio_outputs)
+    output = next(output for output in audio_outputs if output.data == "external_speaker")
+    print(output)
+    media.set_audio_output(output)
 if sys.argv[1] == "audio_int":
     media = MediaControl(client)
     audio_outputs = (
@@ -99,6 +104,16 @@ if sys.argv[1] == "youtube":
     apps = control.list_apps()  
     yt = next(app for app in apps if "youtube" in app["title"].lower())
     launch_info = control.launch(yt)
+if sys.argv[1] == "apple":
+    # control = ApplicationControl(client)
+    # apps = control.list_apps()  
+    # yt = next(app for app in apps if "apple" in app["title"].lower() and "tv" in app["title"].lower())
+    # launch_info = control.launch(yt)
+    source_control = SourceControl(client)
+    sources = source_control.list_sources()    # Returns a list of InputSource instances.
+    print([source.label for source in sources])
+    source = next(source for source in sources if "Apple" in source.label)
+    source_control.set_source(source) 
 if sys.argv[1] == "netflix":
     control = ApplicationControl(client)
     apps = control.list_apps()  
@@ -125,6 +140,22 @@ if sys.argv[1] == "down":
     inp = InputControl(client)
     inp.connect_input()
     inp.down()
+if sys.argv[1] == "voldown":
+    inp = InputControl(client)
+    inp.connect_input()
+    inp.volume_down()
+if sys.argv[1] == "volup":
+    inp = InputControl(client)
+    inp.connect_input()
+    inp.volume_up()
+if sys.argv[1] == "mute":
+    inp = InputControl(client)
+    inp.connect_input()
+    inp.mute()
+if sys.argv[1] == "unmute":
+    inp = InputControl(client)
+    inp.connect_input()
+    inp.mute()
 if sys.argv[1] == "left":
     inp = InputControl(client)
     inp.connect_input()
