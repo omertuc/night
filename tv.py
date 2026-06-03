@@ -50,6 +50,7 @@ else:
         0
     ]  # Use discover(secure=True) for newer models.
 
+print(f"Connecting to {client.host}...")
 client.connect()
 
 for status in client.register(store):
